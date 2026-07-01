@@ -1,85 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prediksi Diabetes - Komputerisasi Awan</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
-        .container { max-width: 500px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); margin: auto; }
-        h2 { text-align: center; color: #333; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="number"], select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
-        button:hover { background-color: #218838; }
-        .result { margin-top: 20px; padding: 15px; background-color: #e2f0d9; border-left: 5px solid #28a745; font-size: 18px; text-align: center; font-weight: bold; }
-    </style>
+  <meta charset="utf-8">
+  <title>Diabetes Prediction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 760px; margin: 24px auto; padding: 0 16px; }
+    form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+    label { display: block; font-size: 14px; margin-bottom: 4px; }
+    input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+    .full { grid-column: 1 / -1; }
+    .submit { grid-column: 1 / -1; text-align: right; margin-top: 8px; }
+    .result { margin-top: 16px; font-weight: bold; }
+  </style>
 </head>
 <body>
+  <h1>Diabetes Prediction</h1>
 
-<div class="container">
-    <h2>Aplikasi Prediksi Diabetes</h2>
-    
-    <form action="/predict" method="POST">
-        <div class="form-group">
-            <label for="model_choice">Pilih Model Machine Learning:</label>
-            <select name="model_choice" id="model_choice" required>
-                {% for name in model_names %}
-                    <option value="{{ name }}">{{ name }}</option>
-                {% endfor %}
-            </select>
-        </div>
+  {% if prediction %}
+    <div class="result">Hasil prediksi: {{ prediction }}</div>
+  {% endif %}
 
-        <div class="form-group">
-            <label for="pregnancies">Pregnancies (Jumlah Kehamilan):</label>
-            <input type="number" name="pregnancies" id="pregnancies" placeholder="Contoh: 2" required>
-        </div>
+  <form method="post" action="/predict">
+    <div class="full">
+      <label for="model">Model</label>
+      <select id="model" name="model" required>
+        {% for m in model_names %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+      </select>
+    </div>
 
-        <div class="form-group">
-            <label for="glucose">Glucose (Kadar Glukosa):</label>
-            <input type="number" name="glucose" id="glucose" placeholder="Contoh: 120" required>
-        </div>
+    <div><label>Pregnancies</label><input type="number" name="pregnancies" required></div>
+    <div><label>Glucose</label><input type="number" name="glucose" required></div>
+    <div><label>BloodPressure</label><input type="number" name="blood_pressure" required></div>
+    <div><label>SkinThickness</label><input type="number" name="skin_thickness" required></div>
+    <div><label>Insulin</label><input type="number" name="insulin" required></div>
+    <div><label>BMI</label><input type="number" step="0.1" name="bmi" required></div>
+    <div><label>DiabetesPedigreeFunction</label><input type="number" step="0.001" name="diabetes_pedigree" required></div>
+    <div><label>Age</label><input type="number" name="age" required></div>
 
-        <div class="form-group">
-            <label for="blood_pressure">Blood Pressure (Tekanan Darah):</label>
-            <input type="number" name="blood_pressure" id="blood_pressure" placeholder="Contoh: 80" required>
-        </div>
-
-        <div class="form-group">
-            <label for="skin_thickness">Skin Thickness (Ketebalan Kulit):</label>
-            <input type="number" name="skin_thickness" id="skin_thickness" placeholder="Contoh: 20" required>
-        </div>
-
-        <div class="form-group">
-            <label for="insulin">Insulin:</label>
-            <input type="number" name="insulin" id="insulin" placeholder="Contoh: 85" required>
-        </div>
-
-        <div class="form-group">
-            <label for="bmi">BMI (Body Mass Index):</label>
-            <input type="number" step="0.1" name="bmi" id="bmi" placeholder="Contoh: 33.6" required>
-        </div>
-
-        <div class="form-group">
-            <label for="diabetes_pedigree">Diabetes Pedigree Function:</label>
-            <input type="number" step="0.001" name="diabetes_pedigree" id="diabetes_pedigree" placeholder="Contoh: 0.627" required>
-        </div>
-
-        <div class="form-group">
-            <label for="age">Age (Usia):</label>
-            <input type="number" name="age" id="age" placeholder="Contoh: 25" required>
-        </div>
-
-        <button type="submit">Lakukan Prediksi</button>
-    </form>
-
-    {% if prediction_text %}
-        <div class="result">
-            {{ prediction_text }}
-        </div>
-    {% endif %}
-</div>
-
+    <div class="submit"><button type="submit">Predict</button></div>
+  </form>
 </body>
 </html>
